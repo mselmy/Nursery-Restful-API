@@ -14,6 +14,9 @@ router.route("/teachers")
 router.route("/teachers/supervisors")
     .get(controller.getSupervisorTeachers);
 
+router.route("/teachers/changePassword")
+    .put(controller.changePassword);
+
 router.route("/teachers/:id")
     .get(paramValidate, validator, controller.getTeacherById);
 

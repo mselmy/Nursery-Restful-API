@@ -114,3 +114,35 @@ exports.getSupervisorTeachers = (req, res, next) => {
             next(error);
         });
 };
+
+// Change teacher password
+exports.changePassword = (req, res, next) => {
+    const { _id, oldPassword, newPassword } = req.body;
+    Teacher.findById(_id)
+        .then((teacher) => {
+            if (!teacher) {
+                return res.status(404).send({ message: "Teacher not found" });
+            }
+            bcrypt.compare(oldPassword, teacher.password)
+                .then((isMatch) => {
+                    if (!isMatch) {
+                        return res.status(401).send({ message: "Incorrect password" });
+                    }
+                    const hashedPass = bcrypt.hashSync(newPassword, 10)
+                        
+                    Teacher.findByIdAndUpdate(_id, { password: hashedPass })
+                        .then(() => {
+                            res.send({ message: "Password changed successfully" });
+                        })
+                        .catch((error) => {
+                            res.status(500).send({ message: "Internal server error1" });
+                        });     
+                })
+                .catch((error) => {
+                    res.status(500).send({ message: "Internal server error3" });
+                });
+        })
+        .catch((error) => {
+            res.status(500).send({ message: "Internal server error4" });
+        });
+};

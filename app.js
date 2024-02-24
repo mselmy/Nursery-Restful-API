@@ -13,7 +13,9 @@ const { insertNewTeachers } = require("./Controller/teacherController");
 const { bodyValidate } = require("./MiddleWare/Validation/TeacherValidation");
 const validator = require("./MiddleWare/Validation/Validator");
 const authenticateRoute = require("./Route/authenticateRoute");
-const authenticationMW= require("./MiddleWare/AuthenticationMW");
+const authenticationMW = require("./MiddleWare/AuthenticationMW");
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require("./Swagger/swaggerSpec");
 
 // connect to mongo DB
 mongoose
@@ -29,10 +31,12 @@ mongoose
     });
 
 // require all middlewares
+server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(upload.single("image"));
 server.use(morgan("dev"));
+
 
 // Register teachers first
 server.post('/teachers', bodyValidate, validator, insertNewTeachers);

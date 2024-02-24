@@ -13,6 +13,7 @@ const { insertNewTeachers } = require("./Controller/teacherController");
 const { bodyValidate } = require("./MiddleWare/Validation/TeacherValidation");
 const validator = require("./MiddleWare/Validation/Validator");
 const authenticateRoute = require("./Route/authenticateRoute");
+const authenticationMW= require("./MiddleWare/AuthenticationMW");
 
 // connect to mongo DB
 mongoose
@@ -35,13 +36,15 @@ server.use(morgan("dev"));
 
 // Register teachers first
 server.post('/teachers', bodyValidate, validator, insertNewTeachers);
-server.use(authenticateRoute);
 
+// authenticate route
+server.use(authenticateRoute);
+server.use(authenticationMW);
+
+// routes
 server.use(childRoute);
 server.use(teacherRoute);
 server.use(classRoute);
-
-
 
 /////////////////////////////Page not found error//////////////////////////
 server.use((req, res) => {

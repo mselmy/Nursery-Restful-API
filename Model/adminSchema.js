@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // create admin schema
 const Schema = new mongoose.Schema({
-    userName: {
+    email: {
         type: String,
         required: true,
         unique: true

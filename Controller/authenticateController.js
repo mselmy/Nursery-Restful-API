@@ -4,70 +4,52 @@ const admin = require("../Model/adminSchema");
 const teacher = require("../Model/teacherSchema");
 require("dotenv").config();
 
-// teacher login
-exports.teacherLogin = (req, res, next) => {
+// Login
+exports.Login = (req, res, next) => {
     const { email, password } = req.body;
-    teacher.findOne({ email })
-        .then((teacher) => {
-            if (!teacher) {
-                let error = new Error("Invalid email or password");
-                error.statusCode = 401;
-                throw error;
-            }
-            return bcrypt.compare(password, teacher.password);
-        })
-        .then((isMatch) => {
-            if (!isMatch) {
-                let error = new Error("Invalid email or password");
-                error.statusCode = 401;
-                throw error;
-            }
-            const token = jwt.sign(
-                {
-                    id: teacher._id,
-                    fullname: teacher.fullName,
-                    role: "teacher",
-                },
-                process.env.SECRET_KEY,
-                { expiresIn: "1h" }
-            );
-            res.status(200).json({
-                message: "Login successful",
-                token
-            });
-        })
-        .catch((error) => {
-            next(error);
-        });
-};
+    console.log(email, password);
+    let user;
 
-// admin login
-exports.adminLogin = (req, res, next) => {
-    const { userName, password } = req.body;
-    admin.findOne({ userName })
-        .then((admin) => {
-            if (!admin) {
-                let error = new Error("Invalid email or password");
-                error.statusCode = 401;
-                throw error;
+    // try to find a teacher with the given email
+    teacher.findOne({ email })
+        .then((foundTeacher) => {
+            if (foundTeacher) {
+                user = foundTeacher;
+                return bcrypt.compare(password, foundTeacher.password);
             }
-            return bcrypt.compare(password, admin.password);
+            // If not found, try to find an admin with the given email
+            return admin.findOne({ email })
+                .then((foundAdmin) => {
+                    if (!foundAdmin) {
+                        let error = new Error("Invalid email or password");
+                        error.statusCode = 401;
+                        throw error;
+                    }
+                    user = foundAdmin;
+                    // No need to compare password for admin as password comparison is done later
+                    return bcrypt.compare(password, foundAdmin.password);;
+                });
         })
         .then((isMatch) => {
+            // If isMatch is true, the password matches for either teacher or admin
             if (!isMatch) {
                 let error = new Error("Invalid email or password");
                 error.statusCode = 401;
                 throw error;
             }
+
+            // Generate token
             const token = jwt.sign(
                 {
-                    id: admin._id,
-                    fullname: admin.fullName,
-                    role: "admin",
+                    id: user._id,
+                    fullname: user.fullName,
+                    role: user instanceof teacher ? "teacher" : "admin",
                 },
                 process.env.SECRET_KEY,
                 { expiresIn: "1h" }
             );
+
+            // Send response
             res.status(200).json({
                 message: "Login successful",
                 token

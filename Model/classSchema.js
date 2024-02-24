@@ -23,7 +23,7 @@ const Schema = new mongoose.Schema({
 }, { _id: false });
 
 // auto increment
-ChildSchema.plugin(AutoIncrement, { id: "classId", inc_field: "_id" });
+Schema.plugin(AutoIncrement, { id: "classId", inc_field: "_id" });
 
 // create a model
 const _class = mongoose.model("Class", Schema);

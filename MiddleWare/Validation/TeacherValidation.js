@@ -8,6 +8,10 @@ exports.bodyValidate = [
     body("password").isStrongPassword().withMessage("Password must be a strong password")
 ]
 
+exports.changePasswordValidate = [
+    body("newPassword").isStrongPassword().withMessage("Password must be a strong password")
+]
+
 exports.paramValidate = [
     param("id").isNumeric().withMessage("Id must be a number")
 ]

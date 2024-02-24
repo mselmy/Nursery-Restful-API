@@ -135,14 +135,14 @@ exports.changePassword = (req, res, next) => {
                             res.send({ message: "Password changed successfully" });
                         })
                         .catch((error) => {
-                            res.status(500).send({ message: "Internal server error1" });
+                            res.status(500).send({ message: "Internal server error" });
                         });     
                 })
                 .catch((error) => {
-                    res.status(500).send({ message: "Internal server error3" });
+                    res.status(500).send({ message: "Internal server error" });
                 });
         })
         .catch((error) => {
-            res.status(500).send({ message: "Internal server error4" });
+            res.status(500).send({ message: "Internal server error" });
         });
 };

@@ -94,7 +94,7 @@ exports.deleteChildren = (req, res, next) => {
 exports.getChildById = (req, res, next) => {
     Child.findById(req.params["id"])
         .then((child) => {
-            if (!classes) throw new Error("Id does not exist");
+            if (!child) throw new Error("Id does not exist");
             res.status(200).json(child);
         })
         .catch((error) => {

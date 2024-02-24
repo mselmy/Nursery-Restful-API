@@ -10,6 +10,8 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const upload = require("./MiddleWare/MulterMW");
 const { insertNewTeachers } = require("./Controller/teacherController");
+const { bodyValidate, paramValidate } = require("./MiddleWare/Validation/TeacherValidation");
+const validator = require("./MiddleWare/Validation/Validator");
 
 // connect to mongo DB
 mongoose
@@ -31,7 +33,7 @@ server.use(upload.single("image"));
 server.use(morgan("dev"));
 
 // Register teachers first
-server.post('/teachers', insertNewTeachers)
+server.post('/teachers', bodyValidate, validator, insertNewTeachers)
 
 server.use(childRoute);
 server.use(teacherRoute);

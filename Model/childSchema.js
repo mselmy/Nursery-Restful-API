@@ -1,6 +1,6 @@
 // require all variables
 const mongoose = require("mongoose");
-//const { autoInc } = require('auto-increment-group');
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 // Define the Address sub-schema
 const addressSchema = new mongoose.Schema({
@@ -24,7 +24,6 @@ const Schema = new mongoose.Schema({
     _id: {
         type: Number,
          unique: true,
-        required: true
     },
     fullName: {
         type: String,
@@ -52,17 +51,13 @@ const Schema = new mongoose.Schema({
         type: String,
         required: true
     }
-});
+}, { _id: false });
+
+// auto increment
+Schema.plugin(AutoIncrement, { id: "childId", inc_field: "_id" });
 
 // create a model
 const Child = mongoose.model("Child", Schema);
-
-/*// auto increment
-Schema.plugin(autoInc, {
-    field: "id",
-    startAt: 1,
-    unique: true
-});*/
 
 // export the model
 module.exports = Child;

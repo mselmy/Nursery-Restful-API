@@ -1,13 +1,12 @@
 // require all variables
 const mongoose = require("mongoose");
-//const { autoInc } = require('auto-increment-group');
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 // create class a schema
 const Schema = new mongoose.Schema({
     _id: {
         type: Number,
         unique: true,
-        required: true
     },
     name: {
         type: String,
@@ -21,17 +20,13 @@ const Schema = new mongoose.Schema({
         type: [Number],
         ref: "Child",
     }
-});
+}, { _id: false });
+
+// auto increment
+ChildSchema.plugin(AutoIncrement, { id: "classId", inc_field: "_id" });
 
 // create a model
 const _class = mongoose.model("Class", Schema);
-
-/*// auto increment
-Schema.plugin(autoInc, {
-    field: "id",
-    startAt: 1,
-    unique: true
-});*/
 
 // export the model
 module.exports = _class;

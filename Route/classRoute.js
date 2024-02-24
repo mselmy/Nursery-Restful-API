@@ -13,9 +13,9 @@ router.route("/class/:id")
     .get(controller.getClassById);
 
 router.route("/class/child/:id")
-    .get(controller.getClassByStudentId);
+    .get(controller.getStudentByClassId);
 
 router.route("/class/teacher/:id")
-    .get(controller.getClassByTeacherId);
+    .get(controller.getTeacherByClassId);
 
 module.exports = router;

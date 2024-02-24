@@ -39,6 +39,26 @@ server.use(morgan("dev"));
 
 
 // Register teachers first
+/**
+ * @swagger
+ * /teachers:
+ *   post:
+ *     summary: Register a new teacher
+ *     tags: [Teachers]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Teacher'
+ *     responses:
+ *       200:
+ *         description: Teacher registered successfully
+ *       400:
+ *         description: Invalid request body
+ *       500:
+ *         description: Internal server error
+ */
 server.post('/teachers', bodyValidate, validator, insertNewTeachers);
 
 // authenticate route

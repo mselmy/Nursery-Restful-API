@@ -13,5 +13,5 @@ exports.changePasswordValidate = [
 ]
 
 exports.paramValidate = [
-    param("id").isNumeric().withMessage("Id must be a number")
+    param("id").isString().withMessage("Id must be a number")
 ]

@@ -19,7 +19,7 @@ exports.getAllTeachers = (req, res, next) => {
 exports.getTeacherById = (req, res, next) => {
     Teacher.findById(req.params["id"])
         .then((teacher) => {
-            if (!classes) throw new Error("Id does not exist");
+            if (!teacher) throw new Error("Id does not exist");
             res.status(200).json(teacher);
         })
         .catch((error) => {
@@ -72,7 +72,7 @@ exports.updateTeachers = (req, res, next) => {
                 teacher.image = req.file.path;
 
                 // save the updated teacher
-                child.save();
+                teacher.save();
             }
             res.status(200).json({
                 message: "Teacher updated successfully",
@@ -129,14 +129,14 @@ exports.changePassword = (req, res, next) => {
                         return res.status(401).send({ message: "Incorrect password" });
                     }
                     const hashedPass = bcrypt.hashSync(newPassword, 10)
-                        
+
                     Teacher.findByIdAndUpdate(_id, { password: hashedPass })
                         .then(() => {
                             res.send({ message: "Password changed successfully" });
                         })
                         .catch((error) => {
                             res.status(500).send({ message: "Internal server error" });
-                        });     
+                        });
                 })
                 .catch((error) => {
                     res.status(500).send({ message: "Internal server error" });

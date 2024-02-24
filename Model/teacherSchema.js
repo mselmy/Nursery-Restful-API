@@ -1,6 +1,5 @@
 // require all variables
 const mongoose = require("mongoose");
-//const { autoInc } = require('auto-increment-group');
 
 // create teacher schema
 const Schema = new mongoose.Schema({
@@ -25,13 +24,6 @@ const Schema = new mongoose.Schema({
 
 // create a model
 const teacher = mongoose.model("Teacher", Schema);
-
-/*// auto increment
-Schema.plugin(autoInc, {
-    field: "id",
-    startAt: 1,
-    unique: true
-});*/
 
 // export the model
 module.exports = teacher;

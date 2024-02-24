@@ -10,9 +10,9 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const upload = require("./MiddleWare/MulterMW");
 const { insertNewTeachers } = require("./Controller/teacherController");
-const { bodyValidate, paramValidate } = require("./MiddleWare/Validation/TeacherValidation");
+const { bodyValidate } = require("./MiddleWare/Validation/TeacherValidation");
 const validator = require("./MiddleWare/Validation/Validator");
-const authenticateRoute = require("./routes/authenticateRoute");
+const authenticateRoute = require("./Route/authenticateRoute");
 
 // connect to mongo DB
 mongoose

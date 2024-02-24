@@ -1,13 +1,23 @@
-// reqire variables
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const admin = require("../Model/adminSchema");
 const teacher = require("../Model/teacherSchema");
+require("dotenv").config();
 
 // teacher login
 exports.teacherLogin = (req, res, next) => {
-    teacher.findOne({ email: req.body.email, password: req.body.password })
+    const { email, password } = req.body;
+    teacher.findOne({ email })
         .then((teacher) => {
             if (!teacher) {
+                let error = new Error("Invalid email or password");
+                error.statusCode = 401;
+                throw error;
+            }
+            return bcrypt.compare(password, teacher.password);
+        })
+        .then((isMatch) => {
+            if (!isMatch) {
                 let error = new Error("Invalid email or password");
                 error.statusCode = 401;
                 throw error;
@@ -26,13 +36,25 @@ exports.teacherLogin = (req, res, next) => {
                 token
             });
         })
+        .catch((error) => {
+            next(error);
+        });
 };
 
 // admin login
 exports.adminLogin = (req, res, next) => {
-    admin.findOne({ userName: req.body.userName, password: req.body.password })
+    const { userName, password } = req.body;
+    admin.findOne({ userName })
         .then((admin) => {
             if (!admin) {
+                let error = new Error("Invalid email or password");
+                error.statusCode = 401;
+                throw error;
+            }
+            return bcrypt.compare(password, admin.password);
+        })
+        .then((isMatch) => {
+            if (!isMatch) {
                 let error = new Error("Invalid email or password");
                 error.statusCode = 401;
                 throw error;
@@ -51,4 +73,7 @@ exports.adminLogin = (req, res, next) => {
                 token
             });
         })
+        .catch((error) => {
+            next(error);
+        });
 };

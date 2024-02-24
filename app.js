@@ -12,6 +12,7 @@ const upload = require("./MiddleWare/MulterMW");
 const { insertNewTeachers } = require("./Controller/teacherController");
 const { bodyValidate, paramValidate } = require("./MiddleWare/Validation/TeacherValidation");
 const validator = require("./MiddleWare/Validation/Validator");
+const authenticateRoute = require("./routes/authenticateRoute");
 
 // connect to mongo DB
 mongoose
@@ -33,7 +34,8 @@ server.use(upload.single("image"));
 server.use(morgan("dev"));
 
 // Register teachers first
-server.post('/teachers', bodyValidate, validator, insertNewTeachers)
+server.post('/teachers', bodyValidate, validator, insertNewTeachers);
+server.use(authenticateRoute);
 
 server.use(childRoute);
 server.use(teacherRoute);

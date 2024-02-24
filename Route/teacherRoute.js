@@ -6,7 +6,6 @@ const validator = require("../MiddleWare/Validation/Validator");
 
 router.route("/teachers")
     .get(controller.getAllTeachers)
-    .post(bodyValidate, validator, controller.insertNewTeachers)
     .put(bodyValidate, validator, controller.updateTeachers)
     .delete(controller.deleteTeacher);
 
